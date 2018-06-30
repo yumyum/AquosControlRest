@@ -1,0 +1,3 @@
+# AquosControlRest
+
+AquosをコントロールするHTTPAPI
