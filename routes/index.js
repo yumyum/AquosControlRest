@@ -3,6 +3,8 @@ var net = require('net')
 var express = require('express');
 var router = express.Router();
 
+const { exec } = require('child_process')
+
 var AQUOS_IP = '192.168.1.32'
 var AQUOS_PORT = 10002
 
@@ -25,6 +27,26 @@ function sendCommand(command, res) {
 	  	//console.log('client disconnected');
 	  	res.sendStatus(200);
   });
+}
+
+function ps4Waker(command, res) {
+  if (command == 'up') {
+    var param = ""
+  } else if (command =='torne') {
+    var param = " start CUSA00442"
+  } else {
+    res.sendStatus(404);
+    return
+  }
+	exec("ps4-waker" + param, (err, stdout, stderr) => {
+		if (err) {
+		  // console.log(`stderr: ${stderr}`)
+		  return
+		}
+		// console.log(`stdout: ${stdout}`)
+	  }
+  )
+  res.sendStatus(200);
 }
 
 /* GET home page. */
@@ -51,6 +73,10 @@ router.get('/channel', function(req, res, next) {
 	//console.log(cmd)
 	sendCommand(channelArray[cmd], res);
 });
-
+router.get('/ps4', function(req, res, next) {
+	var cmd = req.query.value1
+	// console.log(cmd)
+	ps4Waker(cmd, res);
+});
 
 module.exports = router;
