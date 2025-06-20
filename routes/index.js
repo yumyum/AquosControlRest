@@ -17,7 +17,7 @@ function sendCommand(command, res) {
   }, function() {
 	  //console.log('send command: ' + command);
 	  socket.write(command)
-	  socket.write('\r\n')
+	  socket.write('\r')
   });
   socket.on('data', function(data) {
 	  	//console.log(data.toString());
