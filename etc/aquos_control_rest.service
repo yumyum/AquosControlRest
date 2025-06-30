@@ -6,7 +6,7 @@ Type=simple
 User=root
 WorkingDirectory=/home/pi/AquosControlRest
 ExecStart=/usr/local/bin/npm start 
-KillMode=process
+KillMode=control-group
 Restart=on-failure
 RestartSec=60s
 [Install]
