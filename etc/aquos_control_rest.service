@@ -3,11 +3,13 @@ Description=Node.js Application
 After=multi-user.target systemd-update-utmp-runlevel.service
 [Service]
 Type=simple
-User=root
+User=pi
+Group=pi
 WorkingDirectory=/home/pi/AquosControlRest
-ExecStart=/usr/local/bin/npm start 
+ExecStart=/home/pi/.local/bin/npm start
 KillMode=control-group
 Restart=on-failure
 RestartSec=60s
+Environment="PATH=/home/pi/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 [Install]
 WantedBy=multi-user.target
