@@ -75,21 +75,24 @@ function ps4Waker(command) {
  * @returns {Promise<any>} A promise that resolves with the body of the response.
  */
 async function sendRemoCmd(postData) {
-    const options = {
-        url: `http://${CONFIG.REMO_IP}/messages`,
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'a'
-        },
-        json: postData
-    };
-
-    const response = await axios.post(options.url, options.form || options.json, {
-        headers: options.headers,
-        timeout: 10
-    });
-    
-    return response.data;
+    try {
+        const response = await axios.post(
+            `http://${CONFIG.REMO_IP}/messages`,
+            postData,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'a'
+                },
+                timeout: 5000 // 5秒に延長
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Remo command failed:', error);
+        // 必要に応じてエラーを投げ直す
+        throw error;
+    }
 }
 
 // --- Route Handlers ---
