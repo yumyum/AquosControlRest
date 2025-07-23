@@ -1,6 +1,6 @@
 const net = require('net');
 const { exec } = require('child_process');
-const request = require('request');
+const axios = require('axios');
 const express = require('express');
 const router = express.Router();
 
@@ -74,27 +74,22 @@ function ps4Waker(command) {
  * @param {object} postData The IR signal data to send.
  * @returns {Promise<any>} A promise that resolves with the body of the response.
  */
-function sendRemoCmd(postData) {
-    return new Promise((resolve, reject) => {
-        const options = {
-            url: `http://${CONFIG.REMO_IP}/messages`,
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'a'
-            },
-            json: postData
-        };
+async function sendRemoCmd(postData) {
+    const options = {
+        url: `http://${CONFIG.REMO_IP}/messages`,
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'a'
+        },
+        json: postData
+    };
 
-        request.post(options, (error, response, body) => {
-            if (error) {
-                return reject(error);
-            }
-            if (response.statusCode < 200 || response.statusCode >= 300) {
-                return reject(new Error(`Request failed with status code ${response.statusCode}`));
-            }
-            resolve(body);
-        });
+    const response = await axios.post(options.url, options.form || options.json, {
+        headers: options.headers,
+        timeout: 10
     });
+    
+    return response.data;
 }
 
 // --- Route Handlers ---
